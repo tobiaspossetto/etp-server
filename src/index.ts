@@ -1,27 +1,18 @@
-
-import { Server as WebSocketServer } from 'socket.io'
-import http from 'http'
-import app, { args } from './app'
+import app from './app'
 import sockets from './socket/sockets'
-import cluster from 'cluster'
-const numCPUs = require('os').cpus().length
 
-if (args._[1] === 'CLUSTER' && cluster.isMaster) {
-  console.log(`I am a master ${process.pid}`)
-  for (let i = 0; i < numCPUs; i++) {
-    cluster.fork()
-  }
-  cluster.on('exit', function (worker, code, signal) {
-    console.log('worker ' + worker.process.pid + ' died')
-  })
-} else {
-  const server = http.createServer(app)
+const { createServer } = require('http')
+const socketIo = require('socket.io')
+const server = createServer(app)
+const io = socketIo(server, { cors: { origin: '*' } }) // you can change the cors to your own domain
 
-  const httpServer = server.listen(4000)
+app.use((req, res, next) => {
   // @ts-ignore
-  console.log('Server on http://localhost:', args._[0])
+  req.io = io
+  return next()
+})
 
-  const io = new WebSocketServer(httpServer)
-
-  sockets(io)
-}
+// Now all routes & middleware will have access to req.io
+sockets(io)
+app.use('/api', require('./routes/routes'))
+server.listen(4000, () => console.log('Server started!'))

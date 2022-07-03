@@ -1,84 +1,28 @@
-import { Router, Request, Response } from 'express'
-import { fakeProducts } from '../controllers/testController'
-import { isAuth, apiAuth } from '../middleware/auth'
-import passport from 'passport'
-import randomController from '../controllers/randomController'
-import { PORT } from '../app'
+import express from 'express'
 
-import minimist from 'minimist'
-const numCPUs = require('os').cpus().length
-const router = Router()
-export const args = minimist(process.argv.slice(2))
-// VISTAS WEB
-router.get('/signin', (req: Request, res: Response) => {
-  res.render('signin.pug')
-})
-router.get('/signup', (req: Request, res: Response) => {
-  res.render('signup.pug')
-})
+const Router = express.Router()
 
-router.get('/', isAuth, (req:Request, res:Response) => {
-  // @ts-ignore
-  res.render('products.pug', { username: req.session.passport.user.email })
-})
+// Very simple example
+Router.post('/coordenadas', (req, res) => {
+  try {
+    switch (req.body.entity) {
+      case 'a':
+        // @ts-ignore
+        req.io.emit('a', req.body)
+        break
+      case 'b':
+        // @ts-ignore
+        req.io.emit('b', req.body)
+        break
+      default:
+        return res.json({ error: true, message: 'entidad desconocida' })
+    }
 
-router.get('/test', (req:Request, res:Response) => {
-  res.render('test.pug')
-})
-
-router.get('/logout', (req:Request, res:Response) => {
-  res.render('logout.pug', { username: req.query.username })
+    res.json({ error: false, message: 'Coordenadas enviadas' })
+  } catch (error) {
+    console.error(error)
+    res.json({ error: true, message: 'ocurrio un error al enviar' })
+  }
 })
 
-// API
-router.get('/api/productos-test', isAuth, (req:Request, res:Response) => {
-  const result = fakeProducts()
-  res.json(result)
-})
-
-router.post('/api/signin', passport.authenticate('local-signin', {
-  successRedirect: '/',
-  failureRedirect: '/signInError',
-  passReqToCallback: true,
-  failureMessage: true
-}))
-
-router.post('/api/signup', passport.authenticate('local-signup', {
-  successRedirect: '/',
-  failureRedirect: '/signUpError',
-  passReqToCallback: true,
-  failureMessage: true
-}))
-
-router.post('/api/logout', isAuth, (req, res, next) => {
-  // @ts-ignore
-  const username = req.session.passport.user.email
-  // @ts-ignore
-  req.logout(function (err) {
-    if (err) { return next(err) }
-    res.redirect('/logout?username=' + username)
-  })
-})
-
-router.get('/signUpError', (req, res) => {
-  // @ts-ignore
-  console.log(req.session)
-  // @ts-ignore
-  res.render('failSignup.pug', { msg: req.session.messages[req.session.messages.length - 1] })
-})
-
-router.get('/signInError', (req, res) => {
-  // @ts-ignore
-  console.log(req.session)
-  // @ts-ignore
-  res.render('failSignin.pug', { msg: req.session.messages[req.session.messages.length - 1] })
-})
-
-router.get('/api/randoms', randomController.randoms)
-
-router.get('/info', function (req: any, res: { send: (arg0: string) => void }) {
-  console.log(`port: ${PORT} -> Fyh: ${Date.now()} `)
-  res.send(args._[0] + `Procesadores=  ${numCPUs} Servidor express <span style="color:blueviolet;">(Nginx)</span> en ${PORT} - <b>PID ${process.pid}</b> - ${new Date().toLocaleString()}`)
-})
-
-export default router
+module.exports = Router
