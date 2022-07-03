@@ -1,0 +1,25 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PORT = exports.app = exports.args = void 0;
+const express_1 = __importDefault(require("express"));
+const morgan_1 = __importDefault(require("morgan"));
+const cors_1 = __importDefault(require("cors"));
+const dotenv_1 = __importDefault(require("dotenv"));
+const minimist_1 = __importDefault(require("minimist"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
+exports.args = (0, minimist_1.default)(process.argv.slice(2));
+exports.app = (0, express_1.default)();
+exports.PORT = exports.args._[0] || process.env.PORT || 4000;
+console.log(exports.args._[0]);
+dotenv_1.default.config();
+exports.app.use((0, morgan_1.default)('dev'));
+exports.app.use((0, cors_1.default)({ origin: '*' }));
+exports.app.use(express_1.default.urlencoded({ extended: false }));
+exports.app.use(express_1.default.json());
+exports.app.use((0, cookie_parser_1.default)());
+exports.app.set('views', './src/views');
+exports.app.set('view engine', 'pug');
+exports.default = exports.app;
