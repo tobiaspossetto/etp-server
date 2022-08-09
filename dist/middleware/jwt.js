@@ -9,13 +9,14 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 exports.createToken = (data) => {
     const token = jsonwebtoken_1.default.sign({
-        id: data.id, username: data.name, email: data.email
-    }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+        id: data.id, lineName: data.lineName, unit: data.unitName
+    }, process.env.JWT_SECRET_KEY, { expiresIn: '20h' });
     // ! el token se devuelve al usuario para enviarlo en el header
     return token;
 };
 exports.verifyToken = (req, res, next) => {
-    const token = req.header('auth-token');
+    const token = req.header('Authorization');
+    console.log(token);
     if (!token)
         return res.status(403).json({ error: true, data: { message: 'Acceso denegado' } });
     try {
@@ -24,6 +25,7 @@ exports.verifyToken = (req, res, next) => {
         next(); // continuamos
     }
     catch (error) {
+        console.error(error);
         return res.status(403).json({ error: true, data: { message: 'Acceso denegado' } });
     }
 };

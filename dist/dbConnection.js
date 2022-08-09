@@ -19,7 +19,7 @@ function getConnectionMongo() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             // eslint-disable-next-line quotes
-            yield mongoose_1.default.connect(`mongodb+srv://tobias:${process.env.MONGODB_ATLAS_PASSWORD}@cluster0.ulmpx.mongodb.net/ecommerce?retryWrites=true&w=majority`, {
+            yield mongoose_1.default.connect(`mongodb+srv://TOBIAS_POSSETTO:${process.env.MONGODB_ATLAS_PASSWORD}@cluster0.wjizsgs.mongodb.net/?retryWrites=true&w=majority`, {
                 useNewUrlParser: true,
                 useUnifiedTopology: true
             });
