@@ -26,8 +26,8 @@ export default class BondiController {
         return res.status(400).json({ error: true, message: 'Hay un dato incorrecto' })
       }
       // @ts-ignore
-      req.io.emit(req.user.lineName, req.user.unitName, req.body.coord)
-      console.log(req.user.lineName, req.user.unitName, req.body.coord)
+      req.io.emit(req.user.lineName, req.user.unit, req.body.coord)
+      console.log(req.user.lineName, req.user.unit, req.body.coord)
       res.status(200).json({ error: false, message: 'Coordenadas enviadas' })
     } catch (error) {
       console.error(error)
