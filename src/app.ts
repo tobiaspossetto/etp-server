@@ -10,7 +10,7 @@ import { getConnectionMongo } from './dbConnection'
 export const args = minimist(process.argv.slice(2))
 
 export const app = express()
-export const PORT = args._[0] || process.env.PORT || 4000
+export const PORT = process.env.PORT || 4000
 
 console.log(args._[0])
 dotenv.config()
