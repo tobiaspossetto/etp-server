@@ -9,7 +9,6 @@ export default class BondiController {
       }
       const result = await BondiService.Login(req.body)
       if (result.error) {
-        console.log(result)
         return res.status(400).json(result)
       } else {
         console.log(result)
@@ -26,7 +25,7 @@ export default class BondiController {
         return res.status(400).json({ error: true, message: 'Hay un dato incorrecto' })
       }
       // @ts-ignore
-      req.io.emit(req.user.lineName, req.user.unit, req.body.coord)
+      req.io.emit('COORDENADAS', { lineName: req.user.lineName, unitName: req.user.unit, coord: req.body.coord })
       console.log(req.user.lineName, req.user.unit, req.body.coord)
       res.status(200).json({ error: false, message: 'Coordenadas enviadas' })
     } catch (error) {
