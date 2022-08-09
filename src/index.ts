@@ -15,4 +15,4 @@ app.use((req, res, next) => {
 // Now all routes & middleware will have access to req.io
 sockets(io)
 app.use('/api', require('./routes/routes'))
-server.listen(process.env.PORT, () => console.log('Server started!'))
+server.listen(process.env.PORT || 4000, () => console.log('Server started!'))

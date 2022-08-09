@@ -13,7 +13,7 @@ export default class BondiService {
 
           return { error: true, message: checkPassword.message }
         } else {
-          const token = createToken(bondi.data.id)
+          const token = createToken(bondi.data)
           return { error: false, data: { token, id: bondi.data.id, lineName: bondi.data.lineName, unitName: bondi.data.unitName } }
         }
       }
