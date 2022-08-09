@@ -8,8 +8,18 @@ const Router = express_1.default.Router();
 // Very simple example
 Router.post('/coordenadas', (req, res) => {
     try {
-        // @ts-ignore
-        req.io.emit('coordenadas', req.body);
+        switch (req.body.entity) {
+            case 'a':
+                // @ts-ignore
+                req.io.emit('a', req.body);
+                break;
+            case 'b':
+                // @ts-ignore
+                req.io.emit('b', req.body);
+                break;
+            default:
+                return res.json({ error: true, message: 'entidad desconocida' });
+        }
         res.json({ error: false, message: 'Coordenadas enviadas' });
     }
     catch (error) {

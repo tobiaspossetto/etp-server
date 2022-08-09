@@ -5,6 +5,7 @@ import dotenv from 'dotenv'
 
 import minimist from 'minimist'
 import cookieParser from 'cookie-parser'
+import { getConnectionMongo } from './dbConnection'
 
 export const args = minimist(process.argv.slice(2))
 
@@ -20,8 +21,6 @@ app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 
 app.use(cookieParser())
-
-app.set('views', './src/views')
-app.set('view engine', 'pug')
+getConnectionMongo()
 
 export default app

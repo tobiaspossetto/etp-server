@@ -15,6 +15,6 @@ app_1.default.use((req, res, next) => {
     return next();
 });
 // Now all routes & middleware will have access to req.io
-(0, sockets_1.default)(io);
+sockets_1.default(io);
 app_1.default.use('/api', require('./routes/routes'));
 server.listen(4000, () => console.log('Server started!'));
