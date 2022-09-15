@@ -1,11 +1,11 @@
-import { AdminModel } from '../models/admin.model'
+import { BondiModel } from '../models/Bondi.model'
 import { validPassword } from '../validPassword'
-export default class AdminDaos {
-  static async findUser (username:string) {
+export default class BondiDaos {
+  static async findByLineAndUnit (lineName: string, unitName:any) {
     try {
-      const user = await AdminModel.findOne({ username })
-      if (user) {
-        return { error: false, data: user }
+      const bondi = await BondiModel.findOne({ lineName, unitName })
+      if (bondi) {
+        return { error: false, data: bondi }
       } else {
         return { error: true, message: 'no encontrado' }
       }
@@ -17,7 +17,7 @@ export default class AdminDaos {
 
   static async checkPassword (id:string, password:string) {
     try {
-      const bondiPassword = await AdminModel.findById(id)
+      const bondiPassword = await BondiModel.findById(id)
       if (bondiPassword) {
         const result = await validPassword(password, bondiPassword.password)
         if (result) {

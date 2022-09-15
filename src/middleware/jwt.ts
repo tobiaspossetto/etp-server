@@ -5,8 +5,8 @@ dotenv.config()
 
 export const createToken = (data:any) => {
   const token = jwt.sign({
-    id: data.id
-  }, <string>process.env.JWT_SECRET_KEY, { expiresIn: '2h' })
+    id: data.id, lineName: data.lineName, unit: data.unitName
+  }, <string>process.env.JWT_SECRET_KEY, { expiresIn: '20h' })
 
   // ! el token se devuelve al usuario para enviarlo en el header
   return token
@@ -15,13 +15,13 @@ export const createToken = (data:any) => {
 export const verifyToken = (req:Request, res:Response, next:NextFunction) => {
   const token = req.header('Authorization')
   console.log(token)
-  if (!token) return res.status(403).json({ error: true, message: 'Acceso denegado' })
+  if (!token) return res.status(403).json({ error: true, data: { message: 'Acceso denegado' } })
   try {
     const verified = jwt.verify(token, <string>process.env.JWT_SECRET_KEY)
     req.user = verified
     next() // continuamos
   } catch (error) {
     console.error(error)
-    return res.status(403).json({ error: true, message: 'Acceso denegado' })
+    return res.status(403).json({ error: true, data: { message: 'Acceso denegado' } })
   }
 }

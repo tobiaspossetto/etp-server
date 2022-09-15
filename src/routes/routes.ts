@@ -1,37 +1,25 @@
-import express, { Request, Response } from 'express'
-import { encryptPassword } from '../encryptPassword'
-import { AdminModel } from '../models/admin.model'
-import AdminController from '../controllers/admin.ctrl'
-import TurnosController from '../controllers/turnos.ctrl'
-import ExposicionesController from '../controllers/exposiciones.ctrl'
+import express from 'express'
+// import { encryptPassword } from '../encryptPassword'
+// import { BondiModel } from '../models/Bondi.model'
+import BondiController from '../controllers/Bondi.ctrl'
 import { verifyToken } from '../middleware/jwt'
-import { multerCheck, upload } from '../middleware/multer'
-
 const Router = express.Router()
 
-Router.post('/login', AdminController.Login)
+Router.post('/coordenadas', verifyToken, BondiController.sendCoordenadas)
+Router.post('/login', BondiController.Login)
 
 // SIGN UP -- SOLO SE USÓ DESDE EL SERVIDOR PARA GENERAR
 
-Router.post('/crearAdmin', async (req: Request, res: Response) => {
-  const admin = req.body
-  try {
-    admin.password = await encryptPassword(admin.password)
-    const result = await AdminModel.create(admin)
-    res.json({ error: false, message: 'Admin creado', data: result.id })
-  } catch (error) {
-    console.error(error)
-    res.json({ error: true, message: 'ocurrio un error al crear' })
-  }
-})
-
-// TURNOS
-
-Router.post('/crearTurno', TurnosController.saveTurno)
-
-// EXPOSICIONES SOLO ADMIN
-
-Router.post('/crearExposicion', verifyToken, upload.single('audio'), multerCheck, ExposicionesController.crearExposicion)
-Router.put('/crearExposicion/:id', verifyToken, ExposicionesController.updateExposicion)
+// Router.post('/crearBondi', async (req: Request, res: Response) => {
+//   const bondi = req.body
+//   try {
+//     bondi.password = await encryptPassword(bondi.password)
+//     const result = await BondiModel.create(bondi)
+//     res.json({ error: false, message: 'Bondi creado', data: result.id })
+//   } catch (error) {
+//     console.error(error)
+//     res.json({ error: true, message: 'ocurrio un error al crear' })
+//   }
+// })
 
 module.exports = Router
