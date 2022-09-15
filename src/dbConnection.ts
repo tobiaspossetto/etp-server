@@ -4,7 +4,7 @@ import mongoose, { ConnectOptions } from 'mongoose'
 export async function getConnectionMongo () {
   try {
     // eslint-disable-next-line quotes
-    await mongoose.connect(`mongodb+srv://TOBIAS_POSSETTO:${process.env.MONGODB_ATLAS_PASSWORD}@cluster0.wjizsgs.mongodb.net/?retryWrites=true&w=majority`, {
+    await mongoose.connect(`mongodb://127.0.0.1:27017/museo`, {
       useNewUrlParser: true,
       useUnifiedTopology: true
     } as ConnectOptions)
