@@ -1,5 +1,25 @@
 import { ExposicionesModel } from '../models/exposiciones.model'
 export default class ExposicionesDaos {
+  static async getAll () {
+    try {
+      const res = await ExposicionesModel.find()
+      return { error: false, data: [...res] }
+    } catch (error) {
+      console.error(error)
+      return { error: true, message: 'ocurrio un error al consultar  la dase de datos' }
+    }
+  }
+
+  static async delete (id: string) {
+    try {
+      const res = await ExposicionesModel.findOneAndDelete({ _id: id })
+      return { error: false, data: res._id }
+    } catch (error) {
+      console.error(error)
+      return { error: true, message: 'ocurrio un error al eliminar  la dase de datos' }
+    }
+  }
+
   static async saveExposicion (data:string) {
     try {
       const expo = await ExposicionesModel.create(data)

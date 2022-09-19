@@ -31,9 +31,9 @@ Router.post('/crearAdmin', async (req: Request, res: Response) => {
 
 Router.post('/crearTurno', turnoSchema, validateRequest, TurnosController.saveTurno)
 
-// EXPOSICIONES SOLO ADMIN
-
-Router.post('/crearExposicion', verifyToken, upload.single('audio'), multerCheck, exposicionesSchema, validateRequest, ExposicionesController.crearExposicion)
-Router.put('/crearExposicion/:id', verifyToken, ExposicionesController.updateExposicion)
-
+// EXPOSICIONES ADMIN
+Router.get('/expo', ExposicionesController.getAll)
+Router.post('/expo', verifyToken, upload.single('audio'), multerCheck, exposicionesSchema, validateRequest, ExposicionesController.crearExposicion)
+Router.put('/expo/:id', verifyToken, ExposicionesController.updateExposicion)
+Router.delete('/expo/:id', verifyToken, ExposicionesController.deleteExposicion)
 module.exports = Router

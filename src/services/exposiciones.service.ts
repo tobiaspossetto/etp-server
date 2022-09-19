@@ -1,6 +1,16 @@
 import ExposicionesDaos from '../daos/exposiciones.daos'
 const Cloudinary = require('cloudinary')
 export default class ExposicionesService {
+  static async getAll () {
+    try {
+      const res = await ExposicionesDaos.getAll()
+      return res
+    } catch (error) {
+      console.error(error)
+      return { error: true, message: 'Ocurrio un error creando la exposicion' }
+    }
+  }
+
   static async saveExposicion (data:any) {
     try {
       console.log('LLEGA AL SERVICE')
@@ -22,6 +32,16 @@ export default class ExposicionesService {
     } catch (error) {
       console.error(error)
       return { error: true, message: 'Ocurrio un error creando la exposicion' }
+    }
+  }
+
+  static async delete (id:string) {
+    try {
+      const res = await ExposicionesDaos.delete(id)
+      return res
+    } catch (error) {
+      console.error(error)
+      return { error: true, message: 'Ocurrio un error eliminando la exposicion' }
     }
   }
 
