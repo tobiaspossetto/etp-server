@@ -3,9 +3,9 @@ import dotenv from 'dotenv'
 import { Request, Response, NextFunction } from 'express'
 dotenv.config()
 
-export const createToken = (data:any) => {
+export const createToken = (id:string) => {
   const token = jwt.sign({
-    id: data.id
+    id
   }, <string>process.env.JWT_SECRET_KEY, { expiresIn: '2h' })
 
   // ! el token se devuelve al usuario para enviarlo en el header

@@ -6,6 +6,8 @@ import TurnosController from '../controllers/turnos.ctrl'
 import ExposicionesController from '../controllers/exposiciones.ctrl'
 import { verifyToken } from '../middleware/jwt'
 import { multerCheck, upload } from '../middleware/multer'
+import { exposicionesSchema, turnoSchema } from '../middleware/validator/schemas/RequestsSchemas'
+import { validateRequest } from '../middleware/validator/validator'
 
 const Router = express.Router()
 
@@ -27,11 +29,11 @@ Router.post('/crearAdmin', async (req: Request, res: Response) => {
 
 // TURNOS
 
-Router.post('/crearTurno', TurnosController.saveTurno)
+Router.post('/crearTurno', turnoSchema, validateRequest, TurnosController.saveTurno)
 
 // EXPOSICIONES SOLO ADMIN
 
-Router.post('/crearExposicion', verifyToken, upload.single('audio'), multerCheck, ExposicionesController.crearExposicion)
+Router.post('/crearExposicion', verifyToken, upload.single('audio'), multerCheck, exposicionesSchema, validateRequest, ExposicionesController.crearExposicion)
 Router.put('/crearExposicion/:id', verifyToken, ExposicionesController.updateExposicion)
 
 module.exports = Router

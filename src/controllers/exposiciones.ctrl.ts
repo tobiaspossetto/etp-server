@@ -1,4 +1,3 @@
-import console from 'console'
 import { Request, Response } from 'express'
 import ExposicionesService from '../services/exposiciones.service'
 export default class ExposicionesController {
@@ -7,7 +6,6 @@ export default class ExposicionesController {
       if (!req.body.nombre && !req.body.descripcion && !req.body.idiomasDisponibles && !req.body.horas) {
         return res.status(400).json({ error: true, message: 'Faltan campos o estan incorrectos' })
       }
-      console.log(req.file?.path)
       const exposicion = { ...req.body, audioSrc: req.file?.path }
       exposicion.idiomasDisponibles = exposicion.idiomasDisponibles.split(',')
       const result = await ExposicionesService.saveExposicion(exposicion)

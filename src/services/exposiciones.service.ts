@@ -1,11 +1,27 @@
 import ExposicionesDaos from '../daos/exposiciones.daos'
+const Cloudinary = require('cloudinary')
 export default class ExposicionesService {
   static async saveExposicion (data:any) {
     try {
+      console.log('LLEGA AL SERVICE')
+      const resultUpload = await Cloudinary.v2.uploader.upload(data.audioSrc, { resource_type: 'video' })
+      console.log('TRATANDO DE SUBIR')
+      if (!resultUpload) {
+        console.error('Error con el cloudinary')
+        return { error: true, message: 'Ocurrio un error subiendo el archivo a la nube' }
+      }
+
+      data.audioUrl = resultUpload.url
+      data.audioPublicId = resultUpload.public_id
+      data.type = resultUpload.format
+
+      delete data.audioSrc
+
       const res = await ExposicionesDaos.saveExposicion(data)
       return res
     } catch (error) {
-      return { error: true, message: 'Ocurrio un error haciendo el login' }
+      console.error(error)
+      return { error: true, message: 'Ocurrio un error creando la exposicion' }
     }
   }
 

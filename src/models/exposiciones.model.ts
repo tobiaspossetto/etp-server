@@ -8,7 +8,9 @@ const ExposicionesSchema = new mongoose.Schema({
   descripcion: { type: String, required: true },
   idiomasDisponibles: { type: Array, required: true },
   horas: { type: Number, required: true },
-  audioSrc: { type: String, required: true },
+  audioUrl: { type: String, required: true },
+  audioPublicId: { type: String, required: true },
+  type: { type: String, required: true },
   createdAt: { type: Date, default: Date.now }
 
 })

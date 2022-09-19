@@ -1,6 +1,6 @@
 import AdminDaos from '../daos/admin.daos'
 import { createToken } from '../middleware/jwt'
-export default class BondiService {
+export default class AdminService {
   static async Login (data:any) {
     try {
       const query:any = await AdminDaos.findUser(data.username)
@@ -9,12 +9,11 @@ export default class BondiService {
       } else {
         const checkPassword = await AdminDaos.checkPassword(query.data.id, data.password)
         if (checkPassword.error) {
-          console.log('Contraseña incorrecta')
-
           return { error: true, message: checkPassword.message }
         } else {
-          const token = createToken(query.data)
-          return { error: false, data: { token, id: query.data.id, lineName: query.data.lineName, unitName: query.data.unitName } }
+          const token = createToken(query.data._id)
+
+          return { error: false, data: { token, id: query.data.id } }
         }
       }
     } catch (error) {

@@ -1,6 +1,5 @@
 import app from './app'
 import sockets from './socket/sockets'
-
 const { createServer } = require('http')
 const socketIo = require('socket.io')
 const server = createServer(app)
